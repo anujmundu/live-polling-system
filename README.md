@@ -4,7 +4,7 @@ A secure, modular real-time polling app for teachers and students. Built with **
 
 ---
 
-## 🚀 Features
+## Features
 
 - 🔐 Encrypted token-based socket authentication
 - 🧑‍🏫 Role-based flows for teacher and student
