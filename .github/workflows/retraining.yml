@@ -1,0 +1,33 @@
+name: Automated Model Retraining Pipeline
+
+on:
+  repository_dispatch:
+    types: [ drift_retrain_trigger ]
+  workflow_dispatch:
+    inputs:
+      lookback_samples:
+        description: 'Number of recent telemetry samples for training'
+        required: true
+        default: '3000'
+
+jobs:
+  retrain-and-deploy:
+    name: Execute Closed-Loop Retraining
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run Retraining Script
+        run: |
+          python pipelines/retraining_pipeline.py --lookback-samples ${{ github.event.inputs.lookback_samples || 3000 }}
